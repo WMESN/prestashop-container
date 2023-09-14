@@ -2,7 +2,8 @@ version: '3'
 services:
   mysql:
     container_name: presta-mysql
-    image: mysql:5.7
+    image: mysql:8
+    #command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: admin
@@ -30,6 +31,8 @@ services:
       DB_USER: root
       DB_PASSWD: admin
       PS_DOMAIN: localhost:8002
+      PS_DEV_MODE: 0
+      PS_FOLDER_ADMIN: administrator
     secrets:
       - db_root_password
     networks:
@@ -58,6 +61,10 @@ services:
       - ./config-files/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
     networks:
       - prestashop_network
+      - proxy_net
+
+proxy_net:
+  external: true
 
 secrets:
   db_root_password:
